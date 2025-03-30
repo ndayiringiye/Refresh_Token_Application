@@ -1,20 +1,20 @@
-import { matchRoutes } from "react-router";
-import User from "../models/userMode.js"
 import bcrypt from "bcryptjs";
+import User from "../models/userMode.js"; 
 
-export const registerService = async (req, res) => {
-    const { username, email, password } = req.body;
+export const registerService = async (userData) => {
+    const { username, email, password } = userData;
+
     try {
-        const hashedPassword = await bcrypt.hash(password, user.password)
-        const user = await User({
+        const hashedPassword = await bcrypt.hash(password, 10); 
+        const newUser = new User({
             username,
             email,
             password: hashedPassword
         });
-        const newUser = await user.save();
-        res.status(200).json({ msg: "user created successfully" });
+
+        await newUser.save();
         return newUser;
     } catch (error) {
-        res.status(500).json({ msg: "user creation fail" });
+        throw new Error("User creation failed: " + error.message);
     }
-}
+};
